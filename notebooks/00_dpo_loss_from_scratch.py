@@ -59,8 +59,8 @@ print(f"sum log p = {total.item():.3f}   mean log p = {mean.item():.3f}")
 # %%
 def my_dpo_loss(pc, pr, rc, rr, beta=0.1):
     """pc/pr: policy log-prob chosen/rejected; rc/rr: reference. Trả về loss trung bình."""
-    # TODO: viết bằng torch.nn.functional.logsigmoid
-    return None
+    margin = beta * ((pc - rc) - (pr - rr))
+    return -torch.nn.functional.logsigmoid(margin).mean()
 
 
 # %%
@@ -148,3 +148,12 @@ print(f"ORPO  {M.orpo_loss(avg_c, avg_r, -avg_c).item():.4f}")
 # **Câu hỏi cho REFLECTION §3:** tổng log-prob của câu dài luôn âm hơn câu ngắn.
 # Vì sao điều đó khiến DPO gốc dễ thiên vị độ dài, và SimPO/ORPO xử lý bằng cách nào?
 # Gợi ý: NB2 in ra tỉ lệ cặp có chosen dài hơn rejected trong dữ liệu tiếng Việt.
+
+# %% [markdown]
+# **Trả lời:** Margin DPO là hiệu hai thay đổi log-xác suất so với reference.
+# Vì vậy margin vẫn tăng nếu log-xác suất của câu `chosen` giảm, miễn câu
+# `rejected` giảm nhanh hơn. Ví dụ B ở trên: chosen giảm 3 nat, rejected giảm
+# 5 nat, nên margin tăng 2 nat. Với câu dài, tổng log-xác suất thường âm hơn
+# vì cộng nhiều token; DPO dùng tổng nên độ dài có thể ảnh hưởng tín hiệu học.
+# SimPO và ORPO dùng log-xác suất trung bình trên mỗi token để giảm ảnh hưởng
+# trực tiếp của số token, dù thiên lệch trong nhãn dữ liệu vẫn cần đo riêng.
