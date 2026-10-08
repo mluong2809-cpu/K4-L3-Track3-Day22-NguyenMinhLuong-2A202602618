@@ -13,7 +13,7 @@ NB1, NB3 và NB4 chưa chạy. Máy hiện tại có RTX 4060 8 GB, trong khi `H
 ## Cách hoàn tất trên Colab T4
 
 1. Mở `colab/Lab22_DPO_T4.ipynb`, chọn T4 GPU, chạy phần setup rồi NB0–NB4 theo thứ tự. Bản Colab đã có lời giải NB0.
-2. Trước khi phiên hết hạn, tải `submission/screenshots/`, `data/eval/`, các file `.json` trong `adapters/dpo/` và notebook có output. Giữ `data/pref/*.parquet` hiện tại nếu muốn bảo toàn split và dấu vân tay mà NB3 ghi vào `split.json`.
+2. Trước khi phiên hết hạn, tải `submission/screenshots/`, `data/eval/`, các file `.json` trong `adapters/dpo/`, `data/pref/*.parquet` và notebook có output. Khi đưa kết quả Colab vào repo, thay cả hai file Parquet cùng lúc để chúng khớp dấu vân tay mà NB3 ghi vào `split.json`.
 3. Điền `submission/REFLECTION.md` từ các file số liệu thật. Chạy `python scripts/verify.py` (hoặc `make verify` trên Linux/Colab) và chỉ nộp khi lệnh kết thúc thành công.
 
 `python scripts/verify.py` hiện báo thiếu đúng các bằng chứng NB1, NB3, NB4 và các mục tương ứng trong bài phản tư.
